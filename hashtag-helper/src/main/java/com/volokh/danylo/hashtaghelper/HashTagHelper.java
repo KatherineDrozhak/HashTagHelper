@@ -7,10 +7,10 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
-import android.text.util.Linkify;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,17 +39,9 @@ public final class HashTagHelper implements ClickableForegroundColorSpan.OnHashT
     private final List<Character> mAdditionalHashTagChars;
     private TextView mTextView;
     private int mHashTagWordColor;
-    private boolean mShouldHandleLinks = false;
 
     private OnHashTagClickListener mOnHashTagClickListener;
-
-    public boolean isShouldHandleLinks() {
-        return mShouldHandleLinks;
-    }
-
-    public void setShouldHandleLinks(boolean shouldHandleLinks) {
-        mShouldHandleLinks = shouldHandleLinks;
-    }
+    private Set<CharacterStyle> mSpannables = new HashSet<>();
 
     public static final class Creator{
 
@@ -125,12 +117,14 @@ public final class HashTagHelper implements ClickableForegroundColorSpan.OnHashT
 
     private void eraseAndColorizeAllText(CharSequence text) {
 
-//        Spannable spannable = ((Spannable) mTextView.getText());
-//
-//        CharacterStyle[] spans = spannable.getSpans(0, text.length(), CharacterStyle.class);
-//        for (CharacterStyle span : spans) {
-//            spannable.removeSpan(span);
-//        }
+        Spannable spannable = ((Spannable) mTextView.getText());
+
+        CharacterStyle[] spans = spannable.getSpans(0, text.length(), CharacterStyle.class);
+        for (CharacterStyle span : spans) {
+            if (mSpannables.contains(span)) {
+                spannable.removeSpan(span);
+            }
+        }
 
         setColorsToAllHashTags(text);
     }
@@ -189,11 +183,7 @@ public final class HashTagHelper implements ClickableForegroundColorSpan.OnHashT
         }
 
         s.setSpan(span, startIndex, nextNotLetterDigitCharIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        if (mShouldHandleLinks) {
-            mTextView.setAutoLinkMask(Linkify.WEB_URLS);
-        }
-        mTextView.setLinksClickable(mShouldHandleLinks);
+        mSpannables.add(span);
     }
 
     public List<String> getAllHashTags(boolean withHashes) {
