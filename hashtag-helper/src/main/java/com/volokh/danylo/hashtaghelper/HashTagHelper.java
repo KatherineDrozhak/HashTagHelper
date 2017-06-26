@@ -133,11 +133,6 @@ public final class HashTagHelper implements ClickableForegroundColorSpan.OnHashT
         }
 
         setColorsToAllHashTags(text);
-
-        if (mShouldHandleLinks) {
-            mTextView.setAutoLinkMask(Linkify.WEB_URLS);
-        }
-            mTextView.setLinksClickable(mShouldHandleLinks);
     }
 
     private void setColorsToAllHashTags(CharSequence text) {
@@ -194,6 +189,11 @@ public final class HashTagHelper implements ClickableForegroundColorSpan.OnHashT
         }
 
         s.setSpan(span, startIndex, nextNotLetterDigitCharIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        if (mShouldHandleLinks) {
+            mTextView.setAutoLinkMask(Linkify.WEB_URLS);
+        }
+        mTextView.setLinksClickable(mShouldHandleLinks);
     }
 
     public List<String> getAllHashTags(boolean withHashes) {
