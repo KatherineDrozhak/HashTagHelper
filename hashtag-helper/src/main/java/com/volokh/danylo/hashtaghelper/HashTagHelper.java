@@ -125,12 +125,12 @@ public final class HashTagHelper implements ClickableForegroundColorSpan.OnHashT
 
     private void eraseAndColorizeAllText(CharSequence text) {
 
-        Spannable spannable = ((Spannable) mTextView.getText());
-
-        CharacterStyle[] spans = spannable.getSpans(0, text.length(), CharacterStyle.class);
-        for (CharacterStyle span : spans) {
-            spannable.removeSpan(span);
-        }
+//        Spannable spannable = ((Spannable) mTextView.getText());
+//
+//        CharacterStyle[] spans = spannable.getSpans(0, text.length(), CharacterStyle.class);
+//        for (CharacterStyle span : spans) {
+//            spannable.removeSpan(span);
+//        }
 
         setColorsToAllHashTags(text);
     }
