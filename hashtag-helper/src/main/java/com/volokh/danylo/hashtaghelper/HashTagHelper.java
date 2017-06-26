@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
+import android.text.util.Linkify;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -38,8 +39,17 @@ public final class HashTagHelper implements ClickableForegroundColorSpan.OnHashT
     private final List<Character> mAdditionalHashTagChars;
     private TextView mTextView;
     private int mHashTagWordColor;
+    private boolean mShouldHandleLinks = false;
 
     private OnHashTagClickListener mOnHashTagClickListener;
+
+    public boolean isShouldHandleLinks() {
+        return mShouldHandleLinks;
+    }
+
+    public void setShouldHandleLinks(boolean shouldHandleLinks) {
+        mShouldHandleLinks = shouldHandleLinks;
+    }
 
     public static final class Creator{
 
@@ -123,6 +133,11 @@ public final class HashTagHelper implements ClickableForegroundColorSpan.OnHashT
         }
 
         setColorsToAllHashTags(text);
+
+        if (mShouldHandleLinks) {
+            mTextView.setAutoLinkMask(Linkify.WEB_URLS);
+        }
+            mTextView.setLinksClickable(mShouldHandleLinks);
     }
 
     private void setColorsToAllHashTags(CharSequence text) {
